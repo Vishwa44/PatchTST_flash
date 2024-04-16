@@ -1,1 +1,1 @@
-# PatchTST_flash
+# PatchTST Supervised with flashattention
