@@ -22,3 +22,40 @@ The custom kerenl implmentation is in a py notebook format in the Kernel folder.
   -Our kernel has a 1.64 speed up for backward pass and 0.70 speed down for forward pass. 
   -This kernel specifically performs better on smaller context length models.
   -Due to the limitations of the library forward pass is written in an unoptimal way.
+
+## Project Tree:
+├───dataset
+│   ├───electricity
+│   ├───ETT-small
+│   ├───exchange_rate
+│   ├───illness
+│   ├───traffic
+│   └───weather
+├───data_provider
+│   └───__pycache__
+├───exp
+├───Formers
+│   ├───FEDformer
+│   │   ├───data_provider
+│   │   ├───exp
+│   │   ├───layers
+│   │   ├───models
+│   │   ├───scripts
+│   │   └───utils
+│   └───Pyraformer
+│       ├───pyraformer
+│       │   └───lib
+│       ├───scripts
+│       └───utils
+├───layers
+│   └───__pycache__
+├───logs
+│   ├───without_flash
+│   └───with_flash
+├───models
+│   └───__pycache__
+├───scripts
+│   ├───Linear
+│   │   └───univariate
+│   └───PatchTST
+│       └───univariate
