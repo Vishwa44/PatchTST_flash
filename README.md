@@ -24,6 +24,7 @@ The custom kerenl implmentation is in a py notebook format in the Kernel folder.
   -Due to the limitations of the library forward pass is written in an unoptimal way.
 
 ## Project Tree:
+```
 ├───dataset
 │   ├───electricity
 │   ├───ETT-small
@@ -59,3 +60,5 @@ The custom kerenl implmentation is in a py notebook format in the Kernel folder.
 │   │   └───univariate
 │   └───PatchTST
 │       └───univariate
+```
+
