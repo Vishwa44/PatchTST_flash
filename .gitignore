@@ -1,2 +1,5 @@
 dataset/*
 */__pycache__/*
+*.sbatch
+logs
+triton_test.py
