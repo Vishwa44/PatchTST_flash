@@ -16,8 +16,8 @@ Our project is to improve the PatchTST model, this model is a Transformer model 
  - Developing a custom triton kernel:
     To reduce computation overhead for the smaller model size of PatchTST we developed a custom kernel which reads attention scores directly from froward pass which utilized in backward pass.
 
-The custom kerenl implmentation is in a py notebook format in the Kernel folder.
-
+You can access the Flash attention and updated attention kernel on the compare_flash_attention pynotebook.
+You can run it ny running the cells.
 ## Results:
   -Our kernel has a 1.64 speed up for backward pass and 0.70 speed down for forward pass. 
   -This kernel specifically performs better on smaller context length models.
