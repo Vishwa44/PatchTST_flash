@@ -11,6 +11,8 @@ import numpy as np
 #from collections import OrderedDict
 from layers.PatchTST_layers import *
 from layers.RevIN import RevIN
+from kernels.custom_flash_attention import custom_flash_attention
+from kernels.flash_attention_triton import flash_attention_triton
 
 # Cell
 class PatchTST_backbone(nn.Module):
@@ -291,6 +293,8 @@ class _MultiheadAttention(nn.Module):
         self.W_K = nn.Linear(d_model, d_k * n_heads, bias=qkv_bias)
         self.W_V = nn.Linear(d_model, d_v * n_heads, bias=qkv_bias)
 
+        self.scale = d_model // n_heads
+
         # Scaled Dot-Product Attention (multiple heads)
         self.res_attention = res_attention
         self.flash_attention = flash_attention
@@ -325,11 +329,20 @@ class _MultiheadAttention(nn.Module):
             output, attn_weights, attn_scores = self.sdp_attn(q_s, k_s, v_s, prev=prev, key_padding_mask=key_padding_mask, attn_mask=attn_mask)
         else:
             # print("res_attention is false")
-            if self.flash_attention:
+            if self.flash_attention == 'torch':
                 # flash attention
-                print("flash attention")
+                print("pytorch flash attention")
                 with torch.backends.cuda.sdp_kernel(enable_flash=True):
                     output = F.scaled_dot_product_attention(q_s, k_s, v_s, attn_mask=attn_mask, dropout_p=self.attn_dropout)
+            elif self.flash_attention == 'triton':
+                print("triton flash attention")
+                flash_attention_triton_func = lambda: flash_attention_triton(q_s, k_s, v_s, attn_mask, self.scale)
+                output = flash_attention_triton_func()
+
+            elif self.flash_attention == 'custom':
+                print("custom triton flash attention")
+                flash_attention_custom_func = lambda: custom_flash_attention(q_s, k_s, v_s, attn_mask, self.scale)
+                output = flash_attention_custom_func()
             else:
                 print("not using flash attention")
                 output, attn_weights = self.sdp_attn(q_s, k_s, v_s, key_padding_mask=key_padding_mask, attn_mask=attn_mask)

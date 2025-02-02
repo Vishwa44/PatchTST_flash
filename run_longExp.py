@@ -93,7 +93,7 @@ if __name__ == '__main__':
     parser.add_argument('--test_flop', action='store_true', default=False, help='See utils/tools for usage')
     parser.add_argument('--profile', action='store_true', default=False, help='profile this run')
     parser.add_argument('--profiler_logdir',  default="./log", help='profiler log dir')
-    parser.add_argument('--use_flashattention', action='store_true', default=False, help='use flash attention')
+    parser.add_argument('--use_flashattention', type=str, default='None', help='use flash attention choose [torch, triton, custom_triton, None]')
     args = parser.parse_args()
 
     # random seed
@@ -111,6 +111,9 @@ if __name__ == '__main__':
         args.device_ids = [int(id_) for id_ in device_ids]
         args.gpu = args.device_ids[0]
 
+    if args.use_flashattention == 'None':
+        args.use_flashattention = False
+    
     print('Args in experiment:')
     print(args)
 
